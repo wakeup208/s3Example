@@ -23,6 +23,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.s3example.aws.AmazonUtil;
 import com.example.s3example.aws.S3Uploader;
 import com.example.s3example.aws.S3Utils;
 import com.example.s3example.glide.DisplayImage;
@@ -31,6 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,7 +88,15 @@ public class MainActivity extends AppCompatActivity {
         bt_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DisplayImage.getInstance().displayImageForUser(MainActivity.this, image, KEY);
+                //DisplayImage.getInstance().displayImageForUser(MainActivity.this, image, KEY);
+                Glide.with(getApplicationContext())
+                        .setDefaultRequestOptions(new RequestOptions()
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                .placeholder(R.mipmap.ic_launcher)
+                                .fitCenter())
+                        //.load("https://s3.us-east-1.amazonaws.com/ws-store-upload-nmt/1683644925831-1.jpg")
+                        .load(downloadimage())
+                        .into(image);
             }
         });
     }
@@ -155,6 +172,23 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return filePath;
 
+    }
+
+    public String downloadimage() {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR, +1);
+        Date oneHourLater = cal.getTime();
+        AmazonS3 s3 = AmazonUtil.getS3Client(getApplicationContext());
+        URL url = s3.generatePresignedUrl(
+                "testproject12345",
+                "1683644925831-1.jpg",
+                oneHourLater
+        );
+        Log.e("url was", url.toString());
+        String urlstring = url.toString();
+        return urlstring;
     }
 
     private void uploadImageTos3(Uri imageUri) {
