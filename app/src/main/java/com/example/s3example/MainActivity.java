@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.bumptech.glide.Glide;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private int SELECT_PICTURE = 1;
     ProgressDialog progressDialog;
     int count = 0;
+
+    private AmazonS3 s3client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +92,12 @@ public class MainActivity extends AppCompatActivity {
         bt_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //DisplayImage.getInstance().displayImageForUser(MainActivity.this, image, KEY);
+//                DisplayImage.getInstance().displayImageForUser(MainActivity.this, image, KEY);
                 Glide.with(getApplicationContext())
                         .setDefaultRequestOptions(new RequestOptions()
                                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                                 .placeholder(R.mipmap.ic_launcher)
                                 .fitCenter())
-                        //.load("https://s3.us-east-1.amazonaws.com/ws-store-upload-nmt/1683644925831-1.jpg")
                         .load(downloadimage())
                         .into(image);
             }
@@ -182,8 +185,8 @@ public class MainActivity extends AppCompatActivity {
         Date oneHourLater = cal.getTime();
         AmazonS3 s3 = AmazonUtil.getS3Client(getApplicationContext());
         URL url = s3.generatePresignedUrl(
-                "testproject12345",
-                "1683644925831-1.jpg",
+                "ws-store-upload-nmt",
+                "received_950142529365300.jpeg",
                 oneHourLater
         );
         Log.e("url was", url.toString());

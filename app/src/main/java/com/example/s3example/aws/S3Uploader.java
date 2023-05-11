@@ -36,13 +36,6 @@ public class S3Uploader {
         observer.setTransferListener(new UploadListener());
     }
 
-    public void downloadData() {
-        File file = new File("test");
-        TransferObserver observer = transferUtility.download(AWSKeys.BUCKET_NAME, AWSKeys.COGNITO_POOL_ID,
-                file, new UploadListener());
-        observer.setTransferListener(new UploadListener());
-    }
-
     private class UploadListener implements TransferListener {
 
         // Simply updates the UI list when notified.

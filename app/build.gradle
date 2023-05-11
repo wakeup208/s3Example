@@ -27,9 +27,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /*Amazon S3 Libraries*/
-    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.31'
-    implementation 'com.amazonaws:aws-android-sdk-cognito:2.6.31'
-    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.2.+'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.68.0'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.20.1'
+    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.68.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
 
     // Amplify

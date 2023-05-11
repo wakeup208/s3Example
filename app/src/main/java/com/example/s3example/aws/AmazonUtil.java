@@ -1,8 +1,13 @@
 package com.example.s3example.aws;
 
+import static com.example.s3example.aws.AWSKeys.AWS_ACCESS_KEY;
+import static com.example.s3example.aws.AWSKeys.AWS_SECRET_KEY;
+
 import android.content.Context;
 import android.net.Uri;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Region;
@@ -49,8 +54,11 @@ public class AmazonUtil {
      * @return A default S3 client.
      */
     public static AmazonS3Client getS3Client(Context context) {
+        AWSCredentials credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY);
+
         if (sS3Client == null) {
-            sS3Client = new AmazonS3Client(getCredProvider(context));
+            //sS3Client = new AmazonS3Client(getCredProvider(context));
+            sS3Client = new AmazonS3Client(credentials);
             sS3Client.setRegion(Region.getRegion(AWSKeys.MY_REGION));
         }
         return sS3Client;
